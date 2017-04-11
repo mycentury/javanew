@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-4.2.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+	">
+	<aop:aspectj-autoproxy />
+	<aop:config>
+		<aop:aspect ref="methodInterceptor">
+			<aop:pointcut id="before" expression="execution(* xyz.javanew..*.*(..))" />
+			<aop:pointcut id="after" expression="execution(* xyz.javanew..*.*(..))" />
+			<aop:pointcut id="around" expression="execution(* xyz.javanew..*.*(..))" />
+			<aop:pointcut id="after-return" expression="execution(* xyz.javanew..*.*(..))" />
+			<aop:pointcut id="after-throw" expression="execution(* xyz.javanew..*.*(..))" />
+			
+			<aop:before method="doBefore" pointcut-ref="before" />
+			<aop:after-returning method="doAfterReturn" pointcut-ref="after-return" />
+			<aop:after method="doAfter" pointcut-ref="after" />
+			<aop:around method="doAround" pointcut-ref="around" />
+			<aop:after-throwing method="doAfterThrow" pointcut-ref="after-throw" />
+		</aop:aspect>
+	</aop:config>
+</beans>

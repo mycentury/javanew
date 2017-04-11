@@ -61,9 +61,9 @@ public class QrcodeUtil {
 	private static BufferedImage createImage(QrcodeInfo qrcodeInfo) throws Exception {
 		Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
 		ErrorCorrectionLevel calculateQrcodeECL = calculateQrcodeECL(qrcodeInfo.qrcodeContent);
-		hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+		hints.put(EncodeHintType.ERROR_CORRECTION, calculateQrcodeECL);
 		hints.put(EncodeHintType.CHARACTER_SET, DEFAULT_CHARSET);
-		hints.put(EncodeHintType.MARGIN, 1);
+		hints.put(EncodeHintType.MARGIN, 0);
 		BitMatrix bitMatrix = new MultiFormatWriter().encode(qrcodeInfo.qrcodeContent, BarcodeFormat.QR_CODE, qrcodeInfo.qrcodeWidth,
 				qrcodeInfo.qrcodeHeight, hints);
 		// bitMatrix = removeWhiteSpace(bitMatrix);
@@ -262,7 +262,7 @@ public class QrcodeUtil {
 		qrcodeInfo.setQrcodePath(qrcodePath);
 		qrcodeInfo.setNeedCompress(true);
 		// qrcodeInfo.setLogoPath(logoPath);
-		qrcodeInfo.setQrcodeWidth(128);
+		qrcodeInfo.setQrcodeWidth(128);// 16-0,32-1,48-2,64-1,80-0,96-1,112-1,128-0
 		qrcodeInfo.setQrcodeHeight(128);
 		// qrcodeInfo.setLogoWidth(32);
 		// qrcodeInfo.setLogoHeight(32);

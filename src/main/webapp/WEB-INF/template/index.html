@@ -6,6 +6,9 @@
 	<meta name="keywords" content="java,在线,二维码,生成，解析" />
 	<meta name="description" content="java,在线,二维码,生成，解析" />
 	<div th:include="/common/meta :: meta" th:remove="tag"></div>
+	<!-- BEGIN CSS_JS -->
+	<div th:include="/common/css_js :: css_js" th:remove="tag"></div>
+	<!-- END CSS_JS -->
 </head>
 <body th:with="menu='HOME'" th:inline="text">
 
@@ -198,9 +201,6 @@
 		</div>
 	</div>
 
-	<!-- BEGIN CSS_JS -->
-	<div th:include="/common/css_js :: css_js" th:remove="tag"></div>
-	<!-- END CSS_JS -->
 	<div th:include="/common/footer :: footer" th:remove="tag"></div>
 	<script type="text/javascript" src="/jquery/qrcode/qrcode.js"></script>
 	<script type="text/javascript" src="/jquery/qrcode/jquery.qrcode.min.js"></script>
