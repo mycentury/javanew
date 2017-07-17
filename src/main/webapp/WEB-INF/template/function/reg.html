@@ -55,7 +55,7 @@
     		$(tr).parent().children("tr").removeClass("active");
     		var tds = $(tr).children("td");
     		$(tr).addClass("active");
-    		$("#chosen").val($(tds.get(1)).html());
+    		$("#chosen").val($(tds.get(1)).html().replace(/&lt;/g, "<").replace(/&gt;/g, ">"));
     	}
     	
     	function generateCode(codeType){
@@ -63,7 +63,7 @@
 			var result = "";
 			var tab = "&nbsp;&nbsp;&nbsp;&nbsp;"
     		if (codeType=="java") {
-    			result+="<p>String content = \"手机：18243672134，邮箱：adscasgads@xxx.com，身份证：43466019880306156X，时间："+new Date().toLocaleTimeString()+"，小数：123.53\";</p>";
+    			result+="<p>String content = \"手机：18243672134，邮箱：adscasgads@xxx.com，身份证：43466019880306156X，时间："+getCurrentTime()+"，小数：123.53\";</p>";
     			result+="<p>Pattern pattern = Pattern.compile(\""+reg+"\");</p>";
     			result+="<p>Matcher matcher = pattern.matcher(content);</p>";
     			result+="<p>while (matcher.find()) {</p>";
@@ -73,7 +73,7 @@
     			result+="<p>"+tab+"System.out.println(matcher.end());</p>";
     			result+="<p>}</p>";
 			} else if(codeType=="js"){
-    			result+="<p>var content = \"手机：18243672134，邮箱：adscasgads@xxx.com，身份证：43466019880306156X，时间："+new Date().toLocaleTimeString()+"，小数：123.53\";</p>";
+    			result+="<p>var content = \"手机：18243672134，邮箱：adscasgads@xxx.com，身份证：43466019880306156X，时间："+getCurrentTime()+"，小数：123.53\";</p>";
 				result+="<p>var reg = \/"+reg+"\/g</p>";
 				result+="<p>var array=[];</p>";
 				result+="<p>var temp;</p>";
@@ -92,17 +92,17 @@
 			$("#copy").attr("data-clipboard-text",result);
     	}
     	
-		$(function(){
+	$(function(){
 	        var client = new ZeroClipboard($("#copy"));
-			client.on("aftercopy", function (event) {
+		client.on("aftercopy", function (event) {
 	        	alert("复制成功");
-			});
+		});
 	        client.on("error", function (event) {
-				ZeroClipboard.destroy();
+			ZeroClipboard.destroy();
 	        	alert("复制失败，浏览器暂不支持");
 	        });
-		});
-		/* ]]> */
+	});
+	/* ]]> */
     </script>
 </body>
 </html>
