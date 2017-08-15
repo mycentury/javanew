@@ -1,0 +1,36 @@
+@CHARSET "UTF-8";
+
+pre {
+	display: inline;
+	background-color: #ffffff;
+	border: none;
+	padding: 0px;
+	margin: 0;
+	font-size: 14px;
+	line-height: 1.4;
+	color: #333;
+	border-radius: 0px;
+}
+table{
+	width: 100%;
+	table-layout: fixed;
+}
+td.fullSize div,td.fullSize textarea{
+	width: 100%;
+	height: 100%;
+	padding: 0px;
+	border: solid 1px #ccc;
+	margin: 0px;
+}
+td.fullSize{
+	height: inherit;
+	padding: 0px;
+	margin: 0px;
+}
+.fixed-full-scroll{
+	height: 100%;
+	overflow: scroll;
+	padding: 0px;
+	resize: none;
+	border: solid 1px #ccc;
+}

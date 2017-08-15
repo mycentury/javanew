@@ -22,22 +22,34 @@
 					<p style="margin-top: 60px;">
 						<button class="glyphicon glyphicon-random btn" onclick="format_json();"></button>
 					</p>
-					<p style="margin-top: 60px;">
+					<p style="margin-top: 40px;">
 						<label for="highLight">高亮</label>
 						<input id="highLight" type="checkbox" checked="checked" onclick="format_json();" />
+						<br />
+						<label for="startNewline">[{前换行</label>
+						<input id="startNewline" type="checkbox" onclick="format_json();" />
+						<br />
+						<label for="valueTab">值缩进量</label>
+						<select id="valueTab" class="form-control" onpropertychange="format_json();" onchange="format_json();">
+							<option value="0">tab</option>
+							<option value="2">2</option>
+							<option value="4" selected="selected">4</option>
+							<option value="6">6</option>
+							<option value="8">8</option>
+							<option value="10">10</option>
+							<option value="12">12</option>
+						</select>
 					</p>
 					<p style="margin-top: 60px;">
 						<label for="tab">缩进量</label>
 						<select id="tab" class="form-control" onpropertychange="format_json();" onchange="format_json();">
 							<option value="0">tab</option>
-							<option value="1">1</option>
 							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
+							<option value="4" selected="selected">4</option>
 							<option value="6">6</option>
-							<option value="7">7</option>
 							<option value="8">8</option>
+							<option value="10">10</option>
+							<option value="12">12</option>
 						</select>
 					</p>
 					<p style="margin-top: 60px;">
@@ -59,42 +71,7 @@
 	<div th:include="/common/css_js :: css_js" th:remove="tag"></div>
 	<!-- END CSS_JS -->
 	<div th:include="/common/footer :: footer" th:remove="tag"></div>
+	<link rel="stylesheet" href="/css/formatter.css" />
 	<script type="text/javascript" src="/js/formatter.js"></script>
-	<style type="text/css">
-		pre {
-			display: inline;
-			background-color: #ffffff;
-			border: none;
-			padding: 0px;
-			margin: 0;
-			font-size: 14px;
-			line-height: 1.4;
-			color: #333;
-			border-radius: 0px;
-		}
-		table{
-			width: 100%;
-			table-layout: fixed;
-		}
-		td.fullSize div,td.fullSize textarea{
-			width: 100%;
-			height: 100%;
-			padding: 0px;
-			border: solid 1px #ccc;
-			margin: 0px;
-		}
-		td.fullSize{
-			height: inherit;
-			padding: 0px;
-			margin: 0px;
-		}
-		.fixed-full-scroll{
-			height: 100%;
-			overflow: scroll;
-			padding: 0px;
-			resize: none;
-			border: solid 1px #ccc;
-		}
-	</style>
 </body>
 </html>

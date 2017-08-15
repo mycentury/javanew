@@ -60,7 +60,7 @@
 	<script type="text/javascript" src="/jquery/colorpicker/js/colorpicker.js"></script>
     <script type="text/javascript" src="/jquery/colorpicker/js/eye.js"></script>
     <script type="text/javascript" src="/jquery/colorpicker/js/utils.js"></script>
-    <script type="text/javascript" src="/jquery/colorpicker/js/layout.js?ver=1.0.2"></script>
+    <script type="text/javascript" src="/jquery/colorpicker/js/layout.js"></script>
     <script type="text/javascript" src="/zeroclipboard/ZeroClipboard.js"></script>
     <script type="text/javascript">
     	/* <![CDATA[ */
@@ -100,7 +100,7 @@
 		        	alert(msg+":"+event.data["text/plain"]);
 				});
 		        client.on("error", function (event) {
-					ZeroClipboard.destroy();
+					// ZeroClipboard.destroy();
 		        });
 				/* toCopy.ondblclick = function (event) {
 					event.clipboardData.setData("text/plain", $(toCopy).html());

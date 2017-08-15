@@ -92,16 +92,15 @@
 			$("#copy").attr("data-clipboard-text",result);
     	}
     	
-	$(function(){
+		$(function(){
 	        var client = new ZeroClipboard($("#copy"));
-		client.on("aftercopy", function (event) {
-	        	alert("复制成功");
-		});
+			client.on("aftercopy", function (event) {
+		        alert("复制成功");
+			});
 	        client.on("error", function (event) {
-			ZeroClipboard.destroy();
-	        	alert("复制失败，浏览器暂不支持");
+				// ZeroClipboard.destroy();
 	        });
-	});
+		});
 	/* ]]> */
     </script>
 </body>

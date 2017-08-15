@@ -2,19 +2,36 @@ var nextLine = "<br />";
 var collapsed = "/img/collapsed.gif";
 var expanded = "/img/expanded.gif";
 var lines = 0;
-var color_key = "#FF6633";
+var color_key = "red";
 var color_value = "green";
 var color_null = "#993300";
-var color_quote = "red";
+var color_quote = "#CC0000";
+
+var collapsed_img = "<img src=\"/img/collapsed.gif\" onclick=\"collapse_by_img(this);\" />";
+var expanded_img = "<img src=\"/img/expanded.gif\" onclick=\"collapse_by_img(this);\" />";
+
 var max_level = 0;
+
+//染色
+function dye(color,value){
+	return "<span style=\"color:"+color+";\">"+value+"</span>";
+}
+
+function grading(level,html){
+	return "<span level=\"" + level + "\">"+html+"</span>";
+}
 
 function format_json() {
 	var tab = $("#tab").val();
+	var valueTab = $("#valueTab").val();
 	var highLight = $("#highLight").prop("checked");
+	var startNewline = $("#startNewline").prop("checked");
 	$("#validate_result").html("正在解析。。。");
 	$("#dest").html("");
 	tab = tab == "0" ? "<pre>&#09;</pre>" : multiplyString("&nbsp;",
 			Number(tab));
+	valueTab = valueTab == "0" ? "<pre>&#09;</pre>" : multiplyString("&nbsp;",
+			Number(valueTab));
 	var level = 0;
 	var source = $("#source").val();
 	var isObject = false;
@@ -22,15 +39,14 @@ function format_json() {
 		source = "\"\"";
 	}
 	var capital = source.trim().charAt(0);
-	if (capital == "{") {
-		source = "[" + source + "]"
-		isObject = true;
-	}
+	source = "(" + source + ")";//防止注入并声明为对象解析
+	
 	try {
 		var sourceObj = eval(source);
-		var formatHtml = parseObject(sourceObj, tab, level, isObject, highLight);
+		var formatHtml = parseObject(sourceObj, tab, level, highLight, startNewline, valueTab);
 		$("#validate_result").html("解析成功").css("color", "green");
 		$("#dest").html(formatHtml);
+		$("#copy_result").attr("data-clipboard-text",formatHtml);
 		lines = countLines(formatHtml);
 	} catch (e) {
 		general_ajax("/function/format", "POST", {
@@ -40,6 +56,7 @@ function format_json() {
 				result = json_parse(result);
 			}
 			$("#dest").html(result.data);
+			$("#copy_result").attr("data-clipboard-text",result.data);
 			$("#validate_result").html("Next is the result from the server!")
 					.css("color", "red");
 		}, null, null);
@@ -50,60 +67,53 @@ function format_json() {
 	generateLevelOptions();
 }
 
-function parseObject(obj, tab, level, isObject, highLight) {
+function parseObject(obj, tab, level, highLight, startNewline, valueTab) {
 	var formatJson = "";
 	var tabs = multiplyString(tab, level);
-	var quote = highLight ? "<span style=\"color:" + color_quote
-			+ ";\">\"</span>" : "\"";
+	var quote = highLight ? dye(color_quote, "\""):"\"";
+	var nullV = highLight ? dye(color_quote, "null"):"null";
 	var type = typeof obj;
 	max_level = max_level < level - 1 ? level - 1 : max_level;
 	if (isArray(obj)) {
-		var arrayStart = (level == 0 ? "" : nextLine) + tabs + "[<img src=\""
-				+ expanded
-				+ "\" onclick=\"collapse_by_img(this);\" /><span level=\""
-				+ level + "\">" + nextLine;
-		formatJson += (level == 0 && isObject) ? "" : arrayStart;
-		level = level == 0 && isObject ? level : level + 1;
+		var arrayStart = (startNewline && level > 0 ? nextLine + tabs : "") + "[" + expanded_img;
+		var arrayEnd = "]";
+		
 		var array = [];
 		for (var i = 0; i < obj.length; i++) {
-			var objJson = multiplyString(tab, level)
-					+ parseObject(obj[i], tab, level, true, highLight);
+			var objJson = tabs + tab + parseObject(obj[i], tab, level+1, highLight, startNewline, valueTab);
 			array.push(objJson);
 		}
-		formatJson += array.join("," + nextLine);
-		formatJson += (level == 0 && isObject) ? ""
-				: ((array.length > 0 ? nextLine : "") + tabs + "</span>]");
+		var html = (obj.length > 0 ? nextLine : "")+array.join("," + nextLine)+(obj.length > 0 ? nextLine+ tabs : "");
+		var arrayContent = grading(level, html);
+
+		formatJson += arrayStart+arrayContent+arrayEnd;
 	} else if (type == "object") {
 		if (obj == null) {
-			formatJson += highLight ? ("<span style=\"color:" + color_null + ";\">null</span>")
-					: "null";
+			formatJson += highLight ? dye(color_null, "null") : "null";
 		} else if (obj.constructor == Date.constructor) {
 			formatJson += obj.toLocaleString();
 		} else if (obj.constructor == RegExp.constructor) {
 			formatJson += obj;
 		} else {
-			formatJson += (isObject ? "" : nextLine + tabs) + "{<img src=\""
-					+ expanded
-					+ "\" onclick=\"collapse_by_img(this);\" /><span level=\""
-					+ level + "\">" + nextLine;
+			var objStart = "{" + expanded_img;
+			var objEnd = (Object.getOwnPropertyNames(obj).length>0 ? nextLine+tabs : "") + "}";
+			
 			var array = [];
 			for ( var key in obj) {
 				var value = obj[key];
-				key = tabs
-						+ tab
-						+ quote
-						+ (highLight ? "<span style=\"color:" + color_key
-								+ ";\">" + key + "</span>" : key) + quote;
-				value = parseObject(value, tab, level + 1, false, highLight);
-				array.push(key + ":" + value);
-			}
-			formatJson += array.join("," + nextLine)
-					+ (array.length > 0 ? nextLine : "") + tabs + "</span>}";
+				key = quote + (highLight ? dye(color_key, key) : key )+ quote;
+				value = parseObject(value, tab, level + 1, highLight, startNewline, valueTab);
+				array.push(tabs + tab + key + ":" + valueTab + value);
+			} 
+			var html = (Object.getOwnPropertyNames(obj).length>0 ? nextLine : "")
+				+array.join("," + nextLine);
+			var objContent = grading(level, html);
+			
+			formatJson += objStart+objContent+objEnd;
 		}
 		// 直接类型
 	} else {
-		var value = highLight ? ("<span style=\"color:" + color_value + ";\">"
-				+ obj + "</span>") : obj;
+		var value = highLight ? dye(color_value, obj): obj;
 		if (type == "number") {
 			formatJson += value;
 		} else if (type == "boolean") {
